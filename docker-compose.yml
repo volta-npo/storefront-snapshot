@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    image: volta-oss/storefront-snapshot:local
+    ports:
+      - "4173:8080"
+    env_file:
+      - .env.example
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+  rust-backend:
+    image: rust:1.95-slim
+    working_dir: /app
+    volumes:
+      - .:/app:ro
+    command: cargo run --manifest-path backend/rust/Cargo.toml -- serve
+    environment:
+      VOLTA_BACKEND_ADDR: 0.0.0.0:8788
+    ports:
+      - "8788:8788"
+    security_opt:
+      - no-new-privileges:true

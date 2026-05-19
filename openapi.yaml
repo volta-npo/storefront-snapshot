@@ -1,0 +1,22 @@
+openapi: 3.1.0
+info:
+  title: "Storefront Snapshot API"
+  version: "1.0.0"
+  description: "Backend API for Before-and-after visual reports for the businesses Volta transforms."
+servers:
+  - url: http://127.0.0.1:8788
+    description: Rust backend
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Product identity and health status
+  /score:
+    get:
+      summary: Score deterministic sample gates
+      responses:
+        '200':
+          description: Release score and fingerprint
+ 
