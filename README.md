@@ -211,6 +211,12 @@ No install step is required for the app itself. Tests use Node's built-in test r
 
 ---
 
+---
+
+## Standalone SaaS expansion
+
+This tool now includes a SaaS-style product workbench layer on top of the local-first release packet. The domain workspace models buyer personas, launch stages, commercial readiness, next-best actions, enriched CSV rows, a product backlog CSV, a client-facing launch brief, and a structured SaaS JSON packet. Product-specific rows, artifacts, checks, and sample data are expanded for the actual workflow in this repository instead of only generic release certification.
+
 ## 🧪 Validation
 
 This repository includes **29 automated tests** covering core scoring, domain behavior, v1 release behavior, and release certification.
