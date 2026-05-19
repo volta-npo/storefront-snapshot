@@ -12,7 +12,7 @@
 
 **Digital Presence** · **No backend. No login. Client data stays local.**
 
-[Live app](https://volta-npo.github.io/02-storefront-snapshot/) · [Report an issue](https://github.com/volta-npo/02-storefront-snapshot/issues) · [Volta](https://voltanpo.org)
+[Live app](https://volta-npo.github.io/storefront-snapshot/) · [Report an issue](https://github.com/volta-npo/storefront-snapshot/issues) · [Volta](https://voltanpo.org)
 
 </div>
 
@@ -193,7 +193,7 @@ This repo is designed to be usable as a real OSS product, not just a static demo
 ## 🛠️ Quick start
 
 ```bash
-git clone https://github.com/volta-npo/02-storefront-snapshot.git
+git clone https://github.com/volta-npo/storefront-snapshot.git
 cd 02-storefront-snapshot
 npm install
 npm test

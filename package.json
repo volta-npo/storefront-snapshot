@@ -32,11 +32,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/volta-npo/02-storefront-snapshot.git"
+    "url": "git+https://github.com/volta-npo/storefront-snapshot.git"
   },
-  "homepage": "https://volta-npo.github.io/02-storefront-snapshot/",
+  "homepage": "https://volta-npo.github.io/storefront-snapshot/",
   "bugs": {
-    "url": "https://github.com/volta-npo/02-storefront-snapshot/issues"
+    "url": "https://github.com/volta-npo/storefront-snapshot/issues"
   },
   "author": "Volta Open Source <volta.npo@gmail.com>",
   "engines": {
