@@ -20,6 +20,20 @@ export declare function calculateDomain(domain: any, state: any): {
 export declare function generateDomainArtifacts(config: any, domain: any, state: any): any;
 export declare function buildDomainMarkdown(config: any, domain: any, state: any): string;
 export declare function buildDomainCsv(domain: any, state: any): string;
+export declare function buildSaasWorkflow(domain: any, state: any): any;
+export declare function buildSaasSummary(config: any, domain: any, state: any): {
+    product: any;
+    client: any;
+    primaryGoal: any;
+    primaryPersona: any;
+    launchStage: any;
+    commercialReadiness: number;
+    nextBestActions: any[];
+    workflow: any;
+};
+export declare function buildClientBrief(config: any, domain: any, state: any): string;
+export declare function buildSaasJson(config: any, domain: any, state: any): string;
+export declare function buildProductBacklogCsv(domain: any, state: any): string;
 export declare function applyDomainSample(domain: any): {
     version: string;
     values: {};

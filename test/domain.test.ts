@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { config } from '../src/config.js';
 import { domain } from '../src/domain.js';
-import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, buildDomainCsv, validateDomainState, applyDomainSample } from '../src/domain-core.js';
+import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, buildDomainCsv, validateDomainState, applyDomainSample, buildSaasWorkflow, buildSaasSummary, buildClientBrief, buildSaasJson, buildProductBacklogCsv } from '../src/domain-core.js';
 
 test('domain tool definition is purpose-built', () => {
   assert.equal(validateDomainDefinition(domain), true);
@@ -43,4 +43,24 @@ test('domain csv export includes every work row', () => {
   const csv = buildDomainCsv(domain, state);
   assert.equal(csv.split('\n').length, domain.rows.length + 1);
   assert.match(csv, /approved/);
+  assert.match(csv, /next_action/);
+});
+
+test('saas workflow summarizes launch stages and next actions', () => {
+  const state = createDomainState(domain);
+  const workflow = buildSaasWorkflow(domain, state);
+  const summary = buildSaasSummary(config, domain, state);
+  assert.ok(workflow.length >= 3);
+  assert.ok(summary.commercialReadiness >= 0);
+  assert.ok(summary.nextBestActions.length > 0);
+});
+
+test('saas exports include client brief, json packet, and backlog', () => {
+  const state = applyDomainSample(domain);
+  const brief = buildClientBrief(config, domain, state);
+  const packet = JSON.parse(buildSaasJson(config, domain, state));
+  const backlog = buildProductBacklogCsv(domain, state);
+  assert.match(brief, /SaaS Launch Brief/);
+  assert.equal(packet.tool, domain.title);
+  assert.match(backlog, /stage,status,readiness/);
 });

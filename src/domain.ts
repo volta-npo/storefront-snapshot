@@ -76,17 +76,37 @@ export const domain = {
     "Transformation delta linked",
     "Owner quote captured",
     "Consent status recorded",
-    "Sponsor-safe narrative drafted"
+    "Sponsor-safe narrative drafted",
+    "Before/after pair quality scored",
+    "Customer journey impact tagged",
+    "Sponsor KPI selected",
+    "Public story approval recorded"
   ],
   "artifacts": [
     "Before/after report",
     "Sponsor slide outline",
-    "Transformation ledger CSV"
+    "Transformation ledger CSV",
+    "Impact story brief",
+    "Before-after asset manifest",
+    "Sponsor KPI snapshot"
   ],
   "checks": [
     "After capture must link to before capture",
     "Consent required for quotes/screenshots",
-    "Capture dates must be ordered"
+    "Capture dates must be ordered",
+    "Every public asset needs consent status",
+    "Before and after captures need matching viewport labels",
+    "Sponsor KPI must link to transformation delta"
   ],
-  "sampleClient": "Riverside Community Bakery"
+  "sampleClient": "Riverside Community Bakery",
+  "saas": {
+    "personas": ["Transformation storyteller", "Sponsor program manager", "Business owner"],
+    "stages": [
+      { "name": "Asset intake", "goal": "Collect before captures, after captures, and owner consent metadata.", "rowPatterns": ["Before|After|Consent|asset"] },
+      { "name": "Delta analysis", "goal": "Connect visual changes to customer journey and operational impact.", "rowPatterns": ["delta|pair|journey|KPI"] },
+      { "name": "Sponsor story", "goal": "Package a sponsor-safe narrative with approved public proof.", "rowPatterns": ["Sponsor|quote|story|approval"] }
+    ],
+    "sampleValues": { "primary-goal": "turn each transformation into a sponsor-ready proof story" },
+    "sampleRows": { "Customer journey impact tagged": "Tagged menu visibility, trust signals, and mobile CTA improvements", "Sponsor KPI selected": "Selected faster first contact and clearer services as sponsor KPIs" }
+  }
 };
