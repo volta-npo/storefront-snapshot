@@ -7,6 +7,49 @@ export function validateDomainDefinition(domain) {
   return true;
 }
 
+const REQUIRED_APPROVALS_BY_KIND = {
+  audit: [/evidence/i, /roadmap|action/i],
+  comparison: [/before/i, /after/i, /consent/i],
+  checklist: [/ownership/i, /access request/i],
+  'site-builder': [/contact|cta/i, /handoff/i],
+  'menu-editor': [/allergen/i, /mobile preview/i],
+  'decision-matrix': [/test booking/i, /fallback contact/i],
+  'code-generator': [/json-ld/i, /validation checklist/i],
+  'response-lab': [/owner approval/i, /escalation/i]
+};
+
+function domainSpecificWarnings(domain, state) {
+  const rows = state.rows || [];
+  const patterns = REQUIRED_APPROVALS_BY_KIND[domain.kind] || [];
+  return patterns.flatMap((pattern) => {
+    const row = rows.find((item) => pattern.test(item.label));
+    return row && !row.approved ? [`${row.label} must be approved for ${domain.title}.`] : [];
+  });
+}
+
+export function validateDomainState(domain, state) {
+  validateDomainDefinition(domain);
+  const warnings = [];
+  const values = state.values || {};
+  for (const field of domain.fields) {
+    const value = values[field.id];
+    if (String(value ?? '').trim() === '') warnings.push(`${field.label} is required.`);
+    if (field.type === 'number') {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) warnings.push(`${field.label} must be a number.`);
+      else if (numeric < 0) warnings.push(`${field.label} cannot be negative.`);
+    }
+  }
+  for (const row of state.rows || []) {
+    const score = Number(row.score || 0);
+    if (score < 0 || score > 10) warnings.push(`${row.label} score must stay between 0 and 10.`);
+    if (row.approved && !String(row.value || '').trim()) warnings.push(`${row.label} needs evidence before approval.`);
+    if (row.approved && score < 7) warnings.push(`${row.label} approval needs a score of 7 or higher.`);
+  }
+  warnings.push(...domainSpecificWarnings(domain, state));
+  return [...new Set(warnings)];
+}
+
 export function createDomainState(domain) {
   validateDomainDefinition(domain);
   const values = {};
@@ -49,7 +92,8 @@ export function calculateDomain(domain, state) {
     secondary = rowScore;
     insight = `${domain.artifacts.length} generated artifacts available`;
   }
-  return { primary, secondary, completeness, rowScore, approved, insight, releaseReady: completeness >= 80 && rowScore >= 75 };
+  const warnings = validateDomainState(domain, state);
+  return { primary, secondary, completeness, rowScore, approved, insight, warnings, releaseReady: completeness >= 80 && rowScore >= 75 && warnings.length === 0 };
 }
 
 export function generateDomainArtifacts(config, domain, state) {
@@ -66,6 +110,9 @@ export function buildDomainMarkdown(config, domain, state) {
   const calc = calculateDomain(domain, state);
   const lines = [`# ${config.title} Domain Tool Export`, '', `**Tool:** ${domain.title}`, `**Purpose:** ${domain.purpose}`, `**Readiness:** ${calc.releaseReady ? 'Ready' : 'Needs work'}`, `**Insight:** ${calc.insight}`, '', '## Inputs'];
   domain.fields.forEach(f => lines.push(`- **${f.label}:** ${state.values[f.id] || 'Not set'}`));
+  lines.push('', '## Validation Warnings');
+  if (calc.warnings.length) calc.warnings.forEach(warning => lines.push(`- ${warning}`));
+  else lines.push('- No domain validation warnings.');
   lines.push('', '## Work Items');
   state.rows.forEach(r => lines.push(`- ${r.approved ? '[x]' : '[ ]'} **${r.label}** — ${r.value || 'No value'} (${r.score}/10)`));
   lines.push('', '## Generated Artifacts');
@@ -73,6 +120,12 @@ export function buildDomainMarkdown(config, domain, state) {
   lines.push('', '## Validation Checks');
   domain.checks.forEach(c => lines.push(`- ${c}`));
   return lines.join('\n');
+}
+
+export function buildDomainCsv(domain, state) {
+  const header = ['id','label','value','score','approved'];
+  const esc = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
+  return [header.join(','), ...(state.rows || []).map((row) => header.map((key) => esc(row[key])).join(','))].join('\n');
 }
 
 export function applyDomainSample(domain) {

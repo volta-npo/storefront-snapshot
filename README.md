@@ -7,12 +7,12 @@
 ![Volta OSS](https://img.shields.io/badge/Volta%20OSS-release%20ready-2563eb?style=for-the-badge)
 ![Mission](https://img.shields.io/badge/Mission-digital%20equity-16a34a?style=for-the-badge)
 ![Runtime](https://img.shields.io/badge/Runtime-local%20first-60a5fa?style=for-the-badge)
-![Tests](https://img.shields.io/badge/Tests-25%20passing-111827?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-27%20passing-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)
 
 **Digital Presence** · **No backend. No login. Client data stays local.**
 
-[Live app](https://volta-npo.github.io/storefront-snapshot/) · [Report an issue](https://github.com/volta-npo/storefront-snapshot/issues) · [Volta](https://voltanpo.org)
+[Live app](https://volta-npo.github.io/02-storefront-snapshot/) · [Report an issue](https://github.com/volta-npo/02-storefront-snapshot/issues) · [Volta](https://voltanpo.org)
 
 </div>
 
@@ -193,7 +193,7 @@ This repo is designed to be usable as a real OSS product, not just a static demo
 ## 🛠️ Quick start
 
 ```bash
-git clone https://github.com/volta-npo/storefront-snapshot.git
+git clone https://github.com/volta-npo/02-storefront-snapshot.git
 cd 02-storefront-snapshot
 npm install
 npm test
@@ -213,10 +213,11 @@ No install step is required for the app itself. Tests use Node's built-in test r
 
 ## 🧪 Validation
 
-This repository includes **25 automated tests** covering core scoring, domain behavior, v1 release behavior, and release certification.
+This repository includes **27 automated tests** covering core scoring, domain behavior, v1 release behavior, and release certification.
 
 ```bash
 npm test
+npm run verify
 ```
 
 Test coverage includes:
@@ -244,8 +245,8 @@ Test coverage includes:
 │   ├── domain.js           # Domain-specific workbench definition
 │   ├── domain-core.js      # Domain calculations and artifacts
 │   ├── v1*.js              # v1 release layer
-│   └── release*.js         # release certification layer
-├── test/                   # 25 automated tests
+│   └── v3*.js              # v3 release certification layer
+├── test/                   # 27 automated tests
 ├── docs/                   # Operations, QA, release checklist
 └── examples/               # Release bundle template
 ```

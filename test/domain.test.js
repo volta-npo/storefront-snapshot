@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { config } from '../src/config.js';
 import { domain } from '../src/domain.js';
-import { validateDomainDefinition, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, applyDomainSample } from '../src/domain-core.js';
+import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, buildDomainCsv, validateDomainState, applyDomainSample } from '../src/domain-core.js';
 test('domain tool definition is purpose-built', () => {
     assert.equal(validateDomainDefinition(domain), true);
     assert.ok(domain.kind.length > 3);
@@ -23,5 +23,20 @@ test('domain artifacts and markdown are product-specific', () => {
     assert.equal(artifacts.length, domain.artifacts.length);
     assert.match(md, new RegExp(config.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.match(md, new RegExp(domain.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+});
+test('domain validation catches missing evidence and score bounds', () => {
+    const state = createDomainState(domain);
+    state.rows[0].approved = true;
+    state.rows[0].value = '';
+    state.rows[0].score = 11;
+    const warnings = validateDomainState(domain, state);
+    assert.ok(warnings.some((warning) => /required|evidence|score/i.test(warning)));
+    assert.equal(calculateDomain(domain, state).releaseReady, false);
+});
+test('domain csv export includes every work row', () => {
+    const state = applyDomainSample(domain);
+    const csv = buildDomainCsv(domain, state);
+    assert.equal(csv.split('\n').length, domain.rows.length + 1);
+    assert.match(csv, /approved/);
 });
 //# sourceMappingURL=domain.test.js.map

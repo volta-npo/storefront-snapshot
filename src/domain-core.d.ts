@@ -1,4 +1,5 @@
 export declare function validateDomainDefinition(domain: any): boolean;
+export declare function validateDomainState(domain: any, state: any): any[];
 export declare function createDomainState(domain: any): {
     version: string;
     values: {};
@@ -13,10 +14,12 @@ export declare function calculateDomain(domain: any, state: any): {
     rowScore: number;
     approved: any;
     insight: string;
+    warnings: any[];
     releaseReady: boolean;
 };
 export declare function generateDomainArtifacts(config: any, domain: any, state: any): any;
 export declare function buildDomainMarkdown(config: any, domain: any, state: any): string;
+export declare function buildDomainCsv(domain: any, state: any): string;
 export declare function applyDomainSample(domain: any): {
     version: string;
     values: {};

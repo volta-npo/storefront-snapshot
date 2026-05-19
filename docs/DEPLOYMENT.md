@@ -6,7 +6,7 @@ This repository is deployable in three supported modes.
 
 The default public deployment is GitHub Pages. The app is static and uses local browser storage.
 
-- URL: https://volta-npo.github.io/storefront-snapshot/
+- URL: https://volta-npo.github.io/02-storefront-snapshot/
 - Build command: `npm run build`
 - Output: checked-in static assets at repository root and `src/*.js` compiled from TypeScript
 

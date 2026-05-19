@@ -9,6 +9,7 @@
     "test": "npm run build && node --test test/*.test.js",
     "start": "python3 -m http.server 4173",
     "validate": "npm test",
+    "verify": "npm run build && npm run typecheck && node --test test/*.test.js && npm run certify",
     "certify": "npm run build && node --test test/v3.test.js",
     "test:all": "npm test",
     "test:rust": "cargo test --manifest-path backend/rust/Cargo.toml",
@@ -31,11 +32,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/volta-npo/storefront-snapshot.git"
+    "url": "git+https://github.com/volta-npo/02-storefront-snapshot.git"
   },
-  "homepage": "https://volta-npo.github.io/storefront-snapshot/",
+  "homepage": "https://volta-npo.github.io/02-storefront-snapshot/",
   "bugs": {
-    "url": "https://github.com/volta-npo/storefront-snapshot/issues"
+    "url": "https://github.com/volta-npo/02-storefront-snapshot/issues"
   },
   "author": "Volta Open Source <volta.npo@gmail.com>",
   "engines": {
