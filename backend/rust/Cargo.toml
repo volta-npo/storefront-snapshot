@@ -1,0 +1,13 @@
+[package]
+name = "storefront_snapshot_backend"
+version = "0.1.0"
+edition = "2021"
+description = "Rust release-gate engine for Storefront Snapshot"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "storefront-snapshot-backend"
+path = "src/main.rs"
