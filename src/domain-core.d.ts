@@ -1,4 +1,5 @@
 export declare function validateDomainDefinition(domain: any): boolean;
+export declare function validateDomainState(domain: any, state: any): any[];
 export declare function createDomainState(domain: any): {
     version: string;
     values: {};
@@ -13,10 +14,26 @@ export declare function calculateDomain(domain: any, state: any): {
     rowScore: number;
     approved: any;
     insight: string;
+    warnings: any[];
     releaseReady: boolean;
 };
 export declare function generateDomainArtifacts(config: any, domain: any, state: any): any;
 export declare function buildDomainMarkdown(config: any, domain: any, state: any): string;
+export declare function buildDomainCsv(domain: any, state: any): string;
+export declare function buildSaasWorkflow(domain: any, state: any): any;
+export declare function buildSaasSummary(config: any, domain: any, state: any): {
+    product: any;
+    client: any;
+    primaryGoal: any;
+    primaryPersona: any;
+    launchStage: any;
+    commercialReadiness: number;
+    nextBestActions: any[];
+    workflow: any;
+};
+export declare function buildClientBrief(config: any, domain: any, state: any): string;
+export declare function buildSaasJson(config: any, domain: any, state: any): string;
+export declare function buildProductBacklogCsv(domain: any, state: any): string;
 export declare function applyDomainSample(domain: any): {
     version: string;
     values: {};
@@ -24,3 +41,16 @@ export declare function applyDomainSample(domain: any): {
     generated: any[];
     updatedAt: string;
 };
+export declare function buildModuleBoard(domain: any, state: any): any;
+export declare function buildPlaybook(domain: any, state: any): any;
+export declare function buildUnitEconomics(domain: any, state: any): {
+    buyer: any;
+    valueMetric: any;
+    priceHint: any;
+    northStar: any;
+    confidence: number;
+    readinessBand: string;
+};
+export declare function buildOperatorRunbook(config: any, domain: any, state: any): string;
+export declare function buildSalesOnePager(config: any, domain: any, state: any): string;
+export declare function buildImplementationPlanCsv(domain: any, state: any): string;

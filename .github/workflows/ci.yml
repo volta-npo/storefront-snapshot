@@ -26,6 +26,8 @@ jobs:
         run: npm run build
       - name: Typecheck
         run: npm run typecheck
+      - name: Verify release certification
+        run: npm run certify
       - name: Run TypeScript tests
         run: node --test test/*.test.js
       - name: Run Python backend tests
@@ -37,7 +39,7 @@ jobs:
       - name: Check generated JavaScript is current
         run: git diff --exit-code -- src test
       - name: Production file audit
-        run: test -f Dockerfile && test -f docker-compose.yml && test -f Makefile && test -f docs/DEPLOYMENT.md
+        run: test -f Dockerfile && test -f docker-compose.yml && test -f Makefile && test -f .env.example && test -f docs/DEPLOYMENT.md
 
       - name: Build Docker image
         run: docker build -t volta-oss/${{ github.event.repository.name }}:ci .

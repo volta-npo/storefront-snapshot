@@ -9,6 +9,7 @@
     "test": "npm run build && node --test test/*.test.js",
     "start": "python3 -m http.server 4173",
     "validate": "npm test",
+    "verify": "npm run build && npm run typecheck && node --test test/*.test.js && npm run certify",
     "certify": "npm run build && node --test test/v3.test.js",
     "test:all": "npm test",
     "test:rust": "cargo test --manifest-path backend/rust/Cargo.toml",
