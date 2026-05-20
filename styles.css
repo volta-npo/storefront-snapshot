@@ -90,3 +90,31 @@ textarea { resize:vertical; }
 @media print{main::before{content:attr(data-print-title);display:block;font-size:1.4rem;font-weight:900;margin-bottom:1rem}.domain-tool,.v1,.v3{break-inside:avoid}.domain-layout,.v1-grid,.v3-grid{grid-template-columns:1fr}.table-wrap{overflow:visible}.domain-table,.v1-table{min-width:0}}
 @media(forced-colors:active){button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid ButtonText}.score-ring{border:2px solid ButtonText}}
 
+
+
+.saas-modules, .saas-playbook {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.saas-modules article, .saas-playbook article {
+  display: grid;
+  gap: .55rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255,255,255,.8);
+  box-shadow: 0 14px 38px rgba(15,23,42,.06);
+}
+.saas-modules .economics-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, white), rgba(255,255,255,.88));
+}
+.saas-modules strong, .saas-playbook strong { color: var(--accent); letter-spacing: -.02em; }
+.saas-modules p, .saas-playbook p { margin: 0; color: var(--muted); }
+.saas-modules span, .saas-playbook span { font-weight: 900; }
+.saas-modules small, .saas-playbook small { color: var(--muted); font-weight: 800; }
+@media (max-width: 1100px) { .saas-modules, .saas-playbook { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 720px) { .saas-modules, .saas-playbook { grid-template-columns: 1fr; } }
+@media (prefers-color-scheme: dark) { .saas-modules article, .saas-playbook article { background: rgba(15,23,42,.76); } }

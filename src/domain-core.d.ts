@@ -41,3 +41,16 @@ export declare function applyDomainSample(domain: any): {
     generated: any[];
     updatedAt: string;
 };
+export declare function buildModuleBoard(domain: any, state: any): any;
+export declare function buildPlaybook(domain: any, state: any): any;
+export declare function buildUnitEconomics(domain: any, state: any): {
+    buyer: any;
+    valueMetric: any;
+    priceHint: any;
+    northStar: any;
+    confidence: number;
+    readinessBand: string;
+};
+export declare function buildOperatorRunbook(config: any, domain: any, state: any): string;
+export declare function buildSalesOnePager(config: any, domain: any, state: any): string;
+export declare function buildImplementationPlanCsv(domain: any, state: any): string;

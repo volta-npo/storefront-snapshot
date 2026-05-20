@@ -252,3 +252,98 @@ export function applyDomainSample(domain) {
   state.rows = state.rows.map((row, index) => ({...row, value: domain.saas?.sampleRows?.[row.label] || `${row.label} completed with sample evidence`, score: index < 6 ? 9 : 8, approved: true}));
   return state;
 }
+
+
+function moduleReadiness(module, index, workflow, rows) {
+  const approvedRows = rows.filter((row) => row.approved && Number(row.score || 0) >= 7 && String(row.value || '').trim()).length;
+  const coverage = rows.length ? Math.round(approvedRows / rows.length * 100) : 0;
+  const stage = workflow[index % Math.max(workflow.length, 1)];
+  const stageReadiness = stage ? stage.readiness : coverage;
+  return Math.round((coverage + stageReadiness + Math.min(100, module.metrics.length * 25)) / 3);
+}
+
+export function buildModuleBoard(domain, state) {
+  const modules = domain.modules || [];
+  const workflow = buildSaasWorkflow(domain, state);
+  const rows = state.rows || [];
+  return modules.map((module, index) => {
+    const readiness = moduleReadiness(module, index, workflow, rows);
+    return {
+      id: `module-${index + 1}`,
+      name: module.name,
+      description: module.description,
+      readiness,
+      status: readiness >= 85 ? 'sellable' : readiness >= 65 ? 'operator-ready' : 'needs buildout',
+      metrics: module.metrics || [],
+      deliverable: module.deliverable,
+      nextAction: readiness >= 85 ? `Package ${module.deliverable}` : `Strengthen ${module.metrics?.[0] || module.name}`
+    };
+  });
+}
+
+export function buildPlaybook(domain, state) {
+  const summaryRows = state.rows || [];
+  return (domain.plays || []).map((play, index) => {
+    const blocker = summaryRows.find((row) => !row.approved || Number(row.score || 0) < 7 || !String(row.value || '').trim());
+    return {
+      id: `play-${index + 1}`,
+      name: play.name,
+      trigger: play.trigger,
+      outcome: play.outcome,
+      activation: blocker ? rowAction(blocker) : `Run ${play.name} with current approved evidence`,
+      owner: domain.saas?.personas?.[index % Math.max(domain.saas?.personas?.length || 1, 1)] || 'Operator'
+    };
+  });
+}
+
+export function buildUnitEconomics(domain, state) {
+  const rows = state.rows || [];
+  const approved = rows.filter((row) => row.approved).length;
+  const evidence = rows.filter((row) => String(row.value || '').trim()).length;
+  const confidence = rows.length ? Math.round(((approved + evidence) / (rows.length * 2)) * 100) : 0;
+  const economics = domain.economics || {};
+  return {
+    buyer: economics.buyer || domain.saas?.personas?.[1] || 'Business owner',
+    valueMetric: economics.valueMetric || 'Owner-approved work packets',
+    priceHint: economics.priceHint || 'Service tier to be validated with first users',
+    northStar: economics.northStar || 'Completed client handoffs',
+    confidence,
+    readinessBand: confidence >= 85 ? 'commercial-ready' : confidence >= 65 ? 'pilot-ready' : 'discovery'
+  };
+}
+
+export function buildOperatorRunbook(config, domain, state) {
+  const summary = buildSaasSummary(config, domain, state);
+  const economics = buildUnitEconomics(domain, state);
+  const lines = [`# ${config.title} Operator Runbook`, '', `## Commercial model`, `- **Buyer:** ${economics.buyer}`, `- **Value metric:** ${economics.valueMetric}`, `- **Price signal:** ${economics.priceHint}`, `- **North star:** ${economics.northStar}`, `- **Confidence:** ${economics.confidence}/100 (${economics.readinessBand})`, '', '## Modules'];
+  buildModuleBoard(domain, state).forEach((module) => {
+    lines.push(`- **${module.name}:** ${module.status} (${module.readiness}/100). Deliverable: ${module.deliverable}. Next: ${module.nextAction}.`);
+  });
+  lines.push('', '## Playbooks');
+  buildPlaybook(domain, state).forEach((play) => {
+    lines.push(`- **${play.name}:** Trigger: ${play.trigger} Outcome: ${play.outcome} Owner: ${play.owner}.`);
+  });
+  lines.push('', '## Launch risks');
+  summary.nextBestActions.forEach((action) => lines.push(`- ${action}`));
+  return lines.join('\n');
+}
+
+export function buildSalesOnePager(config, domain, state) {
+  const economics = buildUnitEconomics(domain, state);
+  const modules = buildModuleBoard(domain, state);
+  const lines = [`# ${config.title} SaaS One-Pager`, '', domain.purpose, '', `**Ideal buyer:** ${economics.buyer}`, `**Value metric:** ${economics.valueMetric}`, `**Packaging signal:** ${economics.priceHint}`, `**North star metric:** ${economics.northStar}`, '', '## Product modules'];
+  modules.forEach((module) => lines.push(`- **${module.name}:** ${module.description} Delivers ${module.deliverable}.`));
+  lines.push('', '## Export suite');
+  (domain.exportSuite || domain.artifacts || []).forEach((artifact) => lines.push(`- ${artifact}`));
+  return lines.join('\n');
+}
+
+export function buildImplementationPlanCsv(domain, state) {
+  const esc = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
+  const header = ['type','name','owner','status','readiness','deliverable','next_action'];
+  const lines = [header.join(',')];
+  buildModuleBoard(domain, state).forEach((module, index) => lines.push(['module', module.name, domain.saas?.personas?.[index % Math.max(domain.saas?.personas?.length || 1, 1)] || 'Operator', module.status, module.readiness, module.deliverable, module.nextAction].map(esc).join(',')));
+  buildPlaybook(domain, state).forEach((play) => lines.push(['playbook', play.name, play.owner, 'available', '', play.outcome, play.activation].map(esc).join(',')));
+  (domain.exportSuite || []).forEach((artifact) => lines.push(['export', artifact, 'Client success', 'available', '', artifact, `Review ${artifact} before handoff`].map(esc).join(',')));
+  return lines.join('\n');
+}

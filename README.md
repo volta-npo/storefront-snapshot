@@ -7,7 +7,7 @@
 ![Volta OSS](https://img.shields.io/badge/Volta%20OSS-release%20ready-2563eb?style=for-the-badge)
 ![Mission](https://img.shields.io/badge/Mission-digital%20equity-16a34a?style=for-the-badge)
 ![Runtime](https://img.shields.io/badge/Runtime-local%20first-60a5fa?style=for-the-badge)
-![Tests](https://img.shields.io/badge/Tests-29%20passing-111827?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-31%20passing-111827?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)
 
 **Digital Presence** · **No backend. No login. Client data stays local.**
@@ -215,11 +215,11 @@ No install step is required for the app itself. Tests use Node's built-in test r
 
 ## Standalone SaaS expansion
 
-This tool now includes a SaaS-style product workbench layer on top of the local-first release packet. The domain workspace models buyer personas, launch stages, commercial readiness, next-best actions, enriched CSV rows, a product backlog CSV, a client-facing launch brief, and a structured SaaS JSON packet. Product-specific rows, artifacts, checks, and sample data are expanded for the actual workflow in this repository instead of only generic release certification.
+This tool now includes a SaaS-style product workbench layer on top of the local-first release packet. The domain workspace models buyer personas, launch stages, commercial readiness, next-best actions, enriched CSV rows, a product backlog CSV, a client-facing launch brief, and a structured SaaS JSON packet. Product-specific rows, artifacts, checks, and sample data are expanded for the actual workflow in this repository instead of only generic release certification. The expanded commercial layer also includes product modules, reusable playbooks, unit-economics positioning, an operator runbook, a sales one-pager, and an implementation-plan CSV so the app can operate more like a standalone SaaS workbench than a static checklist.
 
 ## 🧪 Validation
 
-This repository includes **29 automated tests** covering core scoring, domain behavior, v1 release behavior, and release certification.
+This repository includes **31 automated tests** covering core scoring, domain behavior, v1 release behavior, and release certification.
 
 ```bash
 npm test
@@ -230,6 +230,7 @@ Test coverage includes:
 
 - configuration weights and launch readiness
 - product-specific domain sample data
+- advanced SaaS module board, playbooks, economics, and commercial exports
 - artifact generation and markdown exports
 - v1 launch packet behavior
 - release import/export round trips
@@ -252,7 +253,7 @@ Test coverage includes:
 │   ├── domain-core.js      # Domain calculations and artifacts
 │   ├── v1*.js              # v1 release layer
 │   └── v3*.js              # v3 release certification layer
-├── test/                   # 29 automated tests
+├── test/                   # 31 automated tests
 ├── docs/                   # Operations, QA, release checklist
 └── examples/               # Release bundle template
 ```

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { config } from '../src/config.js';
 import { domain } from '../src/domain.js';
-import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, buildDomainCsv, validateDomainState, applyDomainSample, buildSaasWorkflow, buildSaasSummary, buildClientBrief, buildSaasJson, buildProductBacklogCsv } from '../src/domain-core.js';
+import { validateDomainDefinition, createDomainState, calculateDomain, generateDomainArtifacts, buildDomainMarkdown, buildDomainCsv, validateDomainState, applyDomainSample, buildSaasWorkflow, buildSaasSummary, buildClientBrief, buildSaasJson, buildProductBacklogCsv, buildModuleBoard, buildPlaybook, buildUnitEconomics, buildOperatorRunbook, buildSalesOnePager, buildImplementationPlanCsv } from '../src/domain-core.js';
 
 test('domain tool definition is purpose-built', () => {
   assert.equal(validateDomainDefinition(domain), true);
@@ -63,4 +63,27 @@ test('saas exports include client brief, json packet, and backlog', () => {
   assert.match(brief, /SaaS Launch Brief/);
   assert.equal(packet.tool, domain.title);
   assert.match(backlog, /stage,status,readiness/);
+});
+
+
+test('advanced saas modules, playbooks, and economics are productized', () => {
+  const state = applyDomainSample(domain);
+  const modules = buildModuleBoard(domain, state);
+  const playbook = buildPlaybook(domain, state);
+  const economics = buildUnitEconomics(domain, state);
+  assert.ok(modules.length >= 4);
+  assert.ok(modules.every((module) => module.deliverable.length > 0));
+  assert.ok(playbook.length >= 3);
+  assert.ok(economics.confidence >= 80);
+  assert.ok(economics.valueMetric.length > 0);
+});
+
+test('advanced commercial exports include runbook, one-pager, and implementation csv', () => {
+  const state = applyDomainSample(domain);
+  const runbook = buildOperatorRunbook(config, domain, state);
+  const onePager = buildSalesOnePager(config, domain, state);
+  const plan = buildImplementationPlanCsv(domain, state);
+  assert.match(runbook, /Operator Runbook/);
+  assert.match(onePager, /SaaS One-Pager/);
+  assert.match(plan, /type,name,owner,status,readiness,deliverable,next_action/);
 });
